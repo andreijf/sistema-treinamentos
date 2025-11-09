@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar {{ tipo.capitalize() }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            padding: 40px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        form {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        a {
+            margin-left: 15px;
+            color: #555;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>Editar {{ tipo.capitalize() }}</h2>
+
+    <form method="post">
+        <label for="nome">Nome:</label>
+        <input type="text" name="nome" id="nome" value="{{ dado[1] }}" required>
+
+        {% if tipo == 'unidade' %}
+        <label for="sigla">Sigla:</label>
+        <input type="text" name="sigla" id="sigla" value="{{ dado[2] }}" required>
+        {% endif %}
+
+        <button type="submit">Salvar alterações</button>
+        <a href="{{ url_for('cadastrar') }}">Cancelar</a>
+    </form>
+</body>
+</html>
+

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}Relatórios{% endblock %}
+{% block content %}
+<h2></h2>
+<form method="get" class="mb-4">
+  <div class="row mb-3">
+    <div class="col-md-3">
+      <label for="unidade">Unidades</label>
+      <select multiple class="form-select" name="unidade">
+        {% for u in unidades %}
+        <option value="{{ u[1] }}">{{ u[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label for="area">Áreas</label>
+      <select multiple class="form-select" name="area">
+        {% for a in areas %}
+        <option value="{{ a[1] }}">{{ a[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label for="tema">Temas</label>
+      <select multiple class="form-select" name="tema">
+        {% for t in temas %}
+        <option value="{{ t[1] }}">{{ t[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label>Status</label><br>
+      {% for s in ['Planejado', 'Reprogramado', 'Concluído', 'Cancelado'] %}
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="status" value="{{ s }}">
+        <label class="form-check-label">{{ s }}</label>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-md-3">
+      <label for="data_inicio">Data Início</label>
+      <input type="date" class="form-control" name="data_inicio">
+    </div>
+    <div class="col-md-3">
+      <label for="data_fim">Data Fim</label>
+      <input type="date" class="form-control" name="data_fim">
+    </div>
+    <div class="col-md-6 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary me-2">Filtrar</button>
+      <a href="/exportar_xlsx" class="btn btn-outline-success me-2">Exportar Excel</a>
+      <a href="/exportar_pdf" class="btn btn-outline-danger">Exportar PDF</a>
+    </div>
+  </div>
+</form>
+
+<table class="table table-bordered">
+  <thead class="table-light">
+    <tr>
+      <th>Tema</th>
+      <th>Data</th>
+      <th>Hora</th>
+      <th>Formato</th>
+      <th>Unidades</th>
+      <th>Áreas</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in relatorio %}
+    <tr>
+      <td>{{ r[1] }}</td>
+      <td>{{ r[2] }}</td>
+      <td>{{ r[3] }}</td>
+      <td>{{ r[4] }}</td>
+      <td>{{ r[5] }}</td>
+      <td>{{ r[6] }}</td>
+      <td>
+        <span style="color:
+          {% if r[7] == 'Planejado' %}blue
+          {% elif r[7] == 'Reprogramado' %}orange
+          {% elif r[7] == 'Concluído' %}green
+          {% elif r[7] == 'Cancelado' %}red
+          {% endif %};">{{ r[7] }}</span>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

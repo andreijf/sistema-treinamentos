@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Treinamentos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+            letter-spacing: 1px;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 300px;
+        }
+
+        a.button {
+            text-decoration: none;
+            background-color: #3498db;
+            color: white;
+            padding: 14px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        a.button:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            color: #777;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Cronograma de Treinamento e Desenvolvimento de Unidades</h1>
+    </header>
+
+    <main>
+        <div class="btn-container">
+            <a class="button" href="{{ url_for('cadastrar') }}">Cadastrar Unidades, Áreas e Temas</a>
+            <a class="button" href="{{ url_for('cronograma') }}">Cronograma de Treinamentos</a>
+            <a class="button" href="{{ url_for('relatorios') }}">Relatórios</a>
+        </div>
+    </main>
+
+    <footer>
+        &copy; {{ current_year if current_year else "2025" }} Sistema Interno de Treinamentos
+    </footer>
+
+</body>
+</html>

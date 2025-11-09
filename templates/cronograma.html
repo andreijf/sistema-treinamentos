@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cronograma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9fc;
+            padding: 30px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        header {
+            background-color: #2c3e50;
+            padding: 20px;
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        a.voltar {
+            display: inline-block;
+            margin: 20px 0;
+            background: #7f8c8d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 22px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .msg {
+            color: green;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .btn-acao {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: white;
+            margin: 2px;
+            display: inline-block;
+        }
+
+        .btn-editar {
+            background-color: #f39c12;
+        }
+
+        .btn-editar:hover {
+            background-color: #d68910;
+        }
+
+        .btn-excluir {
+            background-color: #e74c3c;
+        }
+
+        .btn-excluir:hover {
+            background-color: #c0392b;
+        }
+
+        .status-planejado {
+            color: #1c7ed6;
+            font-weight: bold;
+        }
+
+        .status-reprogramado {
+            color: #f59f00;
+            font-weight: bold;
+        }
+
+        .status-concluido {
+            color: #37b24d;
+            font-weight: bold;
+        }
+
+        .status-cancelado {
+            color: #f03e3e;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Cronograma de Treinamentos</h1>
+</header>
+
+<a href="{{ url_for('index') }}" class="voltar">&#8592; Voltar à Página Inicial</a>
+
+{% if msg %}
+    <p class="msg">{{ msg }}</p>
+{% endif %}
+
+<form method="POST">
+    <label for="tema">Tema:</label>
+    <select name="tema" id="tema" required>
+        {% for t in temas %}
+        <option value="{{ t[0] }}">{{ t[1] }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="data">Data:</label>
+    <input type="date" name="data" required>
+
+    <label for="hora">Hora:</label>
+    <input type="time" name="hora" required>
+
+    <label for="formato">Formato:</label>
+    <select name="formato" required>
+        <option value="Presencial">Presencial</option>
+        <option value="Online">Online</option>
+        <option value="Híbrido">Híbrido</option>
+    </select>
+
+    <label for="unidades">Unidades:</label>
+    <select name="unidades" multiple size="5" required>
+        {% for u in unidades %}
+        <option value="{{ u[1] }}">{{ u[1] }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="areas">Áreas:</label>
+    <select name="areas" multiple size="5" required>
+        {% for a in areas %}
+        <option value="{{ a[1] }}">{{ a[1] }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Cadastrar Treinamento</button>
+</form>
+
+<h2 style="color: #2c3e50; margin-bottom: 15px;">Cronogramas Cadastrados</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tema</th>
+            <th>Data</th>
+            <th>Hora</th>
+            <th>Formato</th>
+            <th>Unidades</th>
+            <th>Áreas</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in cronogramas %}
+        <tr>
+            <td>{{ c[0] }}</td>
+            <td>{{ c[1] }}</td>
+            <td>{{ c[2] }}</td>
+            <td>{{ c[3] }}</td>
+            <td>{{ c[4] }}</td>
+            <td>{{ c[5] }}</td>
+            <td>{{ c[6] }}</td>
+            <td>
+                <span class="
+                    {% if c[7] == 'Planejado' %}status-planejado
+                    {% elif c[7] == 'Reprogramado' %}status-reprogramado
+                    {% elif c[7] == 'Concluído' %}status-concluido
+                    {% elif c[7] == 'Cancelado' %}status-cancelado
+                    {% endif %}
+                ">
+                    {{ c[7] }}
+                </span>
+            </td>
+            <td>
+                <a href="{{ url_for('editar_cronograma', id=c[0]) }}" class="btn-acao btn-editar">Editar</a>
+                <a href="{{ url_for('excluir_cronograma', id=c[0]) }}" class="btn-acao btn-excluir" onclick="return confirm('Tem certeza que deseja excluir este cronograma?');">Excluir</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>
