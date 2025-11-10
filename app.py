@@ -114,25 +114,38 @@ def editar_cronograma(id):
         cur = conn.cursor()
 
         if request.method == "POST":
+            tema_id = request.form.get("tema")
+            data = request.form.get("data")
+            hora = request.form.get("hora")
+            formato = request.form.get("formato")
+            unidades = ",".join(request.form.getlist("unidades"))
+            areas = ",".join(request.form.getlist("areas"))
             status = request.form.get("status")
             observacoes = request.form.get("observacoes")
+
             cur.execute("""
                 UPDATE cronogramas
-                SET status = ?, observacoes = ?
+                SET tema_id = ?, data = ?, hora = ?, formato = ?, unidades = ?, areas = ?, status = ?, observacoes = ?
                 WHERE id = ?
-            """, (status, observacoes, id))
+            """, (tema_id, data, hora, formato, unidades, areas, status, observacoes, id))
+            conn.commit()
             return redirect(url_for("cronograma"))
 
+        # Buscar cronograma
         c = cur.execute("""
-            SELECT c.id, t.nome, c.data, c.hora, c.formato, c.unidades, c.areas, c.status, c.observacoes
+            SELECT c.id, c.tema_id, t.nome, c.data, c.hora, c.formato, c.unidades, c.areas, c.status, c.observacoes
             FROM cronogramas c
             JOIN temas t ON c.tema_id = t.id
             WHERE c.id = ?
         """, (id,)).fetchone()
 
-    data_formatada = datetime.strptime(c[2], "%Y-%m-%d").strftime("%d/%m/%Y")
-    c = (c[0], c[1], data_formatada, c[3], c[4], c[5], c[6], c[7], c[8])
-    return render_template("editar_cronograma.html", c=c)
+        # Buscar opções de seleção
+        temas = cur.execute("SELECT id, nome FROM temas").fetchall()
+        unidades = cur.execute("SELECT id, nome FROM unidades").fetchall()
+        areas = cur.execute("SELECT id, nome FROM areas").fetchall()
+
+    return render_template("editar_cronograma.html", c=c, temas=temas, unidades=unidades, areas=areas)
+
 
 # ❗Cole aqui:
 @app.route("/cronograma/excluir/<int:id>")

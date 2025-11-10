@@ -2,61 +2,77 @@
 {% block title %}Editar Treinamento{% endblock %}
 {% block content %}
 
-<div style="max-width: 800px; margin: auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+<h2>Editar Cronograma</h2>
 
-    <h2 style="color: #2c3e50; margin-bottom: 30px; text-align: center;">Editar Cronograma</h2>
+<form method="POST" class="mb-5">
+    <div class="mb-3">
+        <label class="form-label">Tema</label>
+        <select name="tema" class="form-select" required>
+            {% for t in temas %}
+                <option value="{{ t[0] }}" {% if t[0] == c[1] %}selected{% endif %}>{{ t[1] }}</option>
+            {% endfor %}
+        </select>
+    </div>
 
-    <form method="POST">
-        <div class="mb-3">
-            <label class="form-label fw-bold">Tema</label>
-            <input class="form-control" value="{{ c[1] }}" disabled>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Data</label>
+        <input type="date" name="data" class="form-control" value="{{ c[3] }}" required>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Data e Hora</label>
-            <input class="form-control" value="{{ c[2] }} às {{ c[3] }}" disabled>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Hora</label>
+        <input type="time" name="hora" class="form-control" value="{{ c[4] }}" required>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Unidades</label>
-            <input class="form-control" value="{{ c[5].replace(',', ', ') }}" disabled>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Formato</label>
+        <select name="formato" class="form-select" required>
+            {% for f in ['Presencial', 'Online', 'Híbrido'] %}
+                <option value="{{ f }}" {% if c[5] == f %}selected{% endif %}>{{ f }}</option>
+            {% endfor %}
+        </select>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Áreas</label>
-            <input class="form-control" value="{{ c[6].replace(',', ', ') }}" disabled>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Unidades</label>
+        <select name="unidades" class="form-select" multiple required>
+            {% for u in unidades %}
+                <option value="{{ u[1] }}" {% if u[1] in c[6].split(',') %}selected{% endif %}>{{ u[1] }}</option>
+            {% endfor %}
+        </select>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Formato</label>
-            <input class="form-control" value="{{ c[4] }}" disabled>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Áreas</label>
+        <select name="areas" class="form-select" multiple required>
+            {% for a in areas %}
+                <option value="{{ a[1] }}" {% if a[1] in c[7].split(',') %}selected{% endif %}>{{ a[1] }}</option>
+            {% endfor %}
+        </select>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Status</label>
-            <select name="status" class="form-select text-white fw-bold border-0"
+    <div class="mb-3">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select text-white fw-bold"
                 style="background-color:
-                    {% if c[7] == 'Planejado' %}#1c7ed6
-                    {% elif c[7] == 'Reprogramado' %}#f59f00
-                    {% elif c[7] == 'Concluído' %}#37b24d
-                    {% elif c[7] == 'Cancelado' %}#f03e3e
-                    {% else %}#adb5bd{% endif %};">
-                {% for s in ['Planejado', 'Reprogramado', 'Concluído', 'Cancelado'] %}
-                    <option value="{{ s }}" {% if c[7] == s %}selected{% endif %}>{{ s }}</option>
-                {% endfor %}
-            </select>
-        </div>
+                    {% if c[8] == 'Planejado' %}#1c7ed6
+                    {% elif c[8] == 'Reprogramado' %}#f59f00
+                    {% elif c[8] == 'Concluído' %}#37b24d
+                    {% elif c[8] == 'Cancelado' %}#f03e3e
+                    {% else %}#ced4da{% endif %};">
+            {% for s in ['Planejado', 'Reprogramado', 'Concluído', 'Cancelado'] %}
+                <option value="{{ s }}" {% if c[8] == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+        </select>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Observações</label>
-            <textarea name="observacoes" class="form-control" rows="4">{{ c[8] or '' }}</textarea>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Observações</label>
+        <textarea name="observacoes" class="form-control" rows="4">{{ c[9] or '' }}</textarea>
+    </div>
 
-        <div class="d-flex justify-content-between mt-4">
-            <a href="{{ url_for('cronograma') }}" class="btn btn-outline-secondary">&larr; Voltar</a>
-            <button type="submit" class="btn btn-success">Salvar Alterações</button>
-        </div>
-    </form>
-</div>
+    <button type="submit" class="btn btn-success">Salvar Alterações</button>
+    <a href="{{ url_for('cronograma') }}" class="btn btn-outline-secondary ms-2">Voltar</a>
+</form>
 
 {% endblock %}
